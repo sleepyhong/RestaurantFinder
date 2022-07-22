@@ -1,6 +1,9 @@
 import React from "react";
 import { InfoWindow } from '@react-google-maps/api';
 
+// import {Typography, Rating} from '@mui/material';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
 
 const locationImgStyle = {
     width: "250px",
@@ -36,6 +39,8 @@ export default function CustomInfoWindow({ location, setSelectedlocation }) {
                         })
                     }
                 </p>
+                <Typography component="legend">Rating</Typography>
+                <Rating name="read-only" value={location.rating} readOnly />
             </div>
         </InfoWindow>
     );

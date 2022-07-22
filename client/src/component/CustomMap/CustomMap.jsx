@@ -36,8 +36,8 @@ const randomizerButtonStyle = {
     outline: `none`,
     textOverflow: `ellipses`,
     position: "absolute",
-    right: "5%",
-    marginLeft: "-120px"
+    left: "0%",
+    bottom: "0%",
 }
 
 
