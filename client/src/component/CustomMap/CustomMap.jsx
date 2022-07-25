@@ -2,6 +2,7 @@ import React from "react";
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import LocationList from "./LocationList/LocationList";
 import CustomInfoWindow from "./CustomInfoWindow/CustomInfoWindow";
+import LocationSummary from "./LocationSummary/LocationSummary";
 
 const google = window.google;
 
@@ -85,7 +86,6 @@ export default function CustomMap() {
                         pagination.nextPage();
                     }
                     else {
-                        console.log(Object.values(newLocations))
                         setLocations(Object.values(newLocations));
                     }
                 }
@@ -98,28 +98,36 @@ export default function CustomMap() {
         setService(service);
     }
 
+    const onSearchValueChange = (event) => {
+        setSearchValue(event.target.value);
+        setSelectedLocation(null);
+    } 
+
     const onMarkerClick = (location) => {
         setSelectedLocation(location);
     }
 
     const chooseRandomLocation = () => {
-        const index = Math.floor(Math.random() * locations.length);
-        setSearchValue(locations[index].name);
+        const newLocation = locations[Math.floor(Math.random() * locations.length)];
+        setSearchValue(newLocation.name);
+        setSelectedLocation(newLocation);
     }
 
     return (
         <div>
             <GoogleMap
                 center={center}
+                clickableIcons={false}
                 zoom={15}
-                onLoad={(map) => onMapLoad(map)}
+                onLoad={(map) => { onMapLoad(map) }}
+                onClick={() => { setSelectedLocation(null) }}
                 mapContainerStyle={mapContainerStyle}
             >
                 <input
                     type="text"
                     placeholder="Search Restaurant"
                     value={searchValue}
-                    onChange={(event) => { setSearchValue(event.target.value) }}
+                    onChange={onSearchValueChange}
                     style={searchBarStyle}
                 />
                 <button onClick={chooseRandomLocation} style={randomizerButtonStyle}>Randomizer</button>
@@ -130,22 +138,19 @@ export default function CustomMap() {
 
                 {
                     locations.map((location) => {
-                        return (
-                            <>
-                                {
-                                    location.name.toLowerCase().includes(searchValue.toLowerCase()) &&
-                                    <Marker
-                                        key={location.place_id}
-                                        title={location.name}
-                                        position={{
-                                            lat: location.geometry.location.lat(),
-                                            lng: location.geometry.location.lng()
-                                        }}
-                                        onClick={() => { onMarkerClick(location) }}
-                                    />
-                                }
-                            </>
-                        );
+                        if (location.name.toLowerCase().includes(searchValue.toLowerCase())) {
+                            return (
+                                <Marker
+                                    key={`marker_${location.place_id}`}
+                                    title={location.name}
+                                    position={{
+                                        lat: location.geometry.location.lat(),
+                                        lng: location.geometry.location.lng()
+                                    }}
+                                    onClick={() => { onMarkerClick(location) }}
+                                />
+                            );
+                        }
                     })
                 }
 
@@ -154,7 +159,8 @@ export default function CustomMap() {
                     <CustomInfoWindow location={selectedLocation} setSelectedlocation={setSelectedLocation} />
                 }
             </GoogleMap>
-            <LocationList locations={locations} searchValue={searchValue} />
+            {/* <LocationList locations={locations} searchValue={searchValue} /> */}
+            <LocationSummary location={selectedLocation}/>
         </div>
     );
 }

@@ -4,9 +4,10 @@ import { InfoWindow } from '@react-google-maps/api';
 // import {Typography, Rating} from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 const locationImgStyle = {
-    width: "250px",
+    width: "300px",
     height: "auto"
 }
 
@@ -19,14 +20,14 @@ export default function CustomInfoWindow({ location, setSelectedlocation }) {
             }}
             onCloseClick={() => { setSelectedlocation(null) }}
         >
-            <div>
-                <h6>{location.name}</h6>
-                <p>
-                    <a href={`http://maps.google.com/maps?q=${location.vicinity.replace(" ", "+")}`} target="_blank">
+            <Box component="div">
+                <Typography variant="h6">{location.name}</Typography>
+                <Typography>
+                    <a href={`http://maps.google.com/maps?q=${location.vicinity.replace(" ", "+")}`} target="_blank" rel="noopener">
                         {location.vicinity}
                     </a>
-                </p>
-                <p>
+                </Typography>
+                <Box component="div">
                     {
                         location.photos.map((photo, index) => {
                             return (
@@ -38,10 +39,10 @@ export default function CustomInfoWindow({ location, setSelectedlocation }) {
                             )
                         })
                     }
-                </p>
+                </Box>
                 <Typography component="legend">Rating</Typography>
                 <Rating name="read-only" value={location.rating} readOnly />
-            </div>
+            </Box>
         </InfoWindow>
     );
 }

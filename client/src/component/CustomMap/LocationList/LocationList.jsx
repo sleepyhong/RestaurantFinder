@@ -14,21 +14,18 @@ export default function LocationList({ locations, searchValue }) {
         <div style={locationListStyle}>
             {
                 locations.map((location) => {
-                    return (
-                        <>
-                            {
-                                location.name.toLowerCase().includes(searchValue.toLowerCase()) &&
-                                <div key={`list_${location.name}`}>
-                                    <h6>{location.name}</h6>
-                                    <p>
-                                        <a href={`http://maps.google.com/maps?q=${location.vicinity.replace(" ", "+")}`} target="_blank">
-                                            {location.vicinity}
-                                        </a>
-                                    </p>
-                                </div>
-                            }
-                        </>
-                    );
+                    if (location.name.toLowerCase().includes(searchValue.toLowerCase())) {
+                        return (
+                            <div key={`list_${location.place_id}`}>
+                                <h6>{location.name}</h6>
+                                <p>
+                                    <a href={`http://maps.google.com/maps?q=${location.vicinity.replace(" ", "+")}`} target="_blank" rel="noopener">
+                                        {location.vicinity}
+                                    </a>
+                                </p>
+                            </div>
+                        );
+                    }
                 })
             }
         </div>
