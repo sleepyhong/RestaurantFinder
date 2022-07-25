@@ -29,7 +29,7 @@ export default function CustomInfoWindow({ location, setSelectedlocation }) {
                 </Typography>
                 <Box component="div">
                     {
-                        location.photos.map((photo, index) => {
+                        location.photos && location.photos.map((photo, index) => {
                             return (
                                 <img
                                     key={index}
